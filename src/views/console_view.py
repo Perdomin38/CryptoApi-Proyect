@@ -61,7 +61,7 @@ class ConsoleView:
 
     @staticmethod
     def show_history_success(records_count: int):
-        console.print(f"[bold cyan]✅ Successfully saved {records_count} days of data to the database.[/bold cyan]")
+        console.print(f"[bold cyan]✅ Successfully saved {records_count} total records to the database.[/bold cyan]")
 
     @staticmethod
     def show_analysis_table(coin: str, stats: Dict[str, float]):

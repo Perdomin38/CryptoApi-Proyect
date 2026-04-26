@@ -2,23 +2,23 @@ import pytest
 import os
 import sys
 
-# Añadimos la ruta principal para que pytest encuentre la carpeta src
+# Add the main project path so pytest can discover the src module
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.services.processor import DataProcessor
 from src.models.data_models import LivePriceData, HistoricalData
 
-# --- TESTS PARA DATOS EN VIVO ---
+# --- LIVE DATA TESTS ---
 
 def test_process_valid_live_data(tmp_path):
     test_file = tmp_path / "test_history.parquet"
     processor = DataProcessor(file_path=str(test_file))
     
-    # Creamos un OBJETO de prueba usando nuestro modelo
+    # Create a mock object using our strongly-typed model
     mock_data = LivePriceData(
         coin_id="bitcoin",
         usd_price=60000.0,
-        display_currency="eur", # Corregido a EUR para que cuadre con el precio
+        display_currency="eur", # Display currency set to EUR to match the mocked price
         display_price=55000.0
     )
     
@@ -39,18 +39,18 @@ def test_process_invalid_live_data():
     assert price_empty is None
 
 
-# --- TESTS PARA DATOS HISTÓRICOS ---
+# --- HISTORICAL DATA TESTS ---
 
 def test_process_history_bulk(tmp_path):
     test_file = tmp_path / "test_bulk.parquet"
     processor = DataProcessor(file_path=str(test_file))
 
-    # Simulamos datos históricos que devolvería la API
+    # Mock historical data as it would be returned by the API
     mock_history = HistoricalData(
         coin_id="ethereum",
         prices_usd=[
-            [1672531200000, 1500.0], # Día 1
-            [1672617600000, 1600.0]  # Día 2
+            [1672531200000, 1500.0], # Day 1
+            [1672617600000, 1600.0]  # Day 2
         ]
     )
 
@@ -62,13 +62,13 @@ def test_process_history_bulk(tmp_path):
     assert df.iloc[0]['price'] == 1500.0
 
 
-# --- TESTS PARA EL ANÁLISIS DE DATOS ---
+# --- DATA ANALYSIS TESTS ---
 
 def test_analyze_local_data_success(tmp_path):
     test_file = tmp_path / "test_analyze.parquet"
     processor = DataProcessor(file_path=str(test_file))
 
-    # Primero, metemos datos falsos para poder analizarlos después
+    # First, seed the mock database to analyze it later
     mock_history = HistoricalData(
         coin_id="solana",
         prices_usd=[
@@ -79,17 +79,17 @@ def test_analyze_local_data_success(tmp_path):
     )
     processor.process_history_bulk(mock_history)
 
-    # Ahora ejecutamos la función que queremos testear
+    # Now, execute the function we want to test
     stats = processor.analyze_local_data("solana")
 
     assert stats is not None
     assert stats['records'] == 3
     assert stats['max_price'] == 40.0
     assert stats['min_price'] == 20.0
-    assert stats['avg_price'] == 30.0  # La media exacta entre 20, 30 y 40
+    assert stats['avg_price'] == 30.0  # The exact average between 20, 30, and 40
 
 def test_analyze_local_data_empty():
-    processor = DataProcessor(file_path="archivo_que_no_existe.parquet")
+    processor = DataProcessor(file_path="non_existent_file.parquet")
     stats = processor.analyze_local_data("bitcoin")
     
     assert stats is None
