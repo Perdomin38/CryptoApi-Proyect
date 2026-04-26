@@ -1,0 +1,11 @@
+#Virtual environment directories
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Database file
+crypto_history.parquet
