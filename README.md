@@ -12,7 +12,7 @@ The system follows the **Model-View-Controller (MVC)** architectural pattern, en
 - **Views:** Console rendering via the `rich` library.
 - **Controllers:** Orchestrates the flow between the network layer and local persistence.
 
-## 🛠️ Key Technical Features
+## Key Technical Features
 
 ### Data Processing and Storage
 - **Pandas Integration:** Used for normalizing heterogeneous data from the CoinGecko API and converting time-series timestamps.
