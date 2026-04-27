@@ -6,7 +6,7 @@ import os
 # Ensure the root project directory is in the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.controllers.main_controller import MainController
+from src.controllers.controller import MainController
 
 def main():
     """Application entry point."""

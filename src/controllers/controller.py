@@ -1,4 +1,4 @@
-# src/controllers/main_controller.py
+# src/controllers/controller.py
 import sys
 # Update imports based on your new folder structure
 from src.services.api_client import CryptoAPI
